@@ -8,3 +8,6 @@ Thumbs.db
 # Local agent skills/tooling (not part of the website)
 .agents/
 skills-lock.json
+
+# Project context — SENSITIVE (supplier, costs, strategy). Never publish.
+CLAUDE.md
