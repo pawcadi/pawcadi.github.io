@@ -1,143 +1,106 @@
-# 🐾 Pawcadi — Lick Mat E-commerce Website
+# 🐾 Pawcadi — "Comida que muerde"
 
-A professional, single-product e-commerce storefront for selling **dog lick mats**
-in the United States. Built as a fast, dependency-free static site (HTML + CSS +
-vanilla JavaScript) so it's easy to preview, edit and deploy for free.
+Tienda online de una colección de **6 juguetes de látex con sonido para perros**.
+Mercado: **España**. Sitio estático (HTML + CSS + JavaScript, sin dependencias),
+publicado gratis en GitHub Pages.
 
-> **Brand:** Pawcadi · **Shopify store:** `pawcadi.myshopify.com`
-
----
-
-## 📁 Project structure
-
-```
-CLAUDE LICK MAT/
-├── index.html            ← the whole page (all sections live here)
-├── css/
-│   └── styles.css        ← all styling / design
-├── js/
-│   └── main.js           ← cart, gallery, options, FAQ, menu
-└── assets/
-    ├── favicon.svg       ← little logo in the browser tab
-    ├── placeholder.svg   ← shown until you add real photos
-    └── images/
-        └── README.md     ← 👈 where to drop your Lick Mat photos
-```
+| | |
+|---|---|
+| **Web en vivo** | https://pawcadi.github.io |
+| **Tienda Shopify** | `pawcadi.myshopify.com` (procesa el pago) |
+| **Estado** | 🟡 **Pre-lanzamiento** — todavía no se puede comprar |
 
 ---
 
-## 👀 1. Preview the website locally
+## 🗂️ Estructura
 
-You don't need to install anything. Pick one:
+```
+index.html          La página entera
+css/styles.css      Estilos
+js/main.js          Catálogo, cesta y checkout  ← aquí se configura todo
+assets/images/toys/ Fotos de los 6 juguetes
+robots.txt          
+sitemap.xml
+```
 
-**Easiest:** double-click `index.html` — it opens in your browser.
+---
 
-**Better (recommended)** — run a tiny local server so everything behaves like the
-real web. In a terminal, from this folder:
+## 🧸 La colección
+
+| Nombre | Producto | SKU fábrica | Tamaño | Precio |
+|---|---|---|---|---|
+| Croqui | Croissant | ETL1404 | 11 cm | 10,95 € |
+| Quesín | Queso | ETL1405 | 6,8 cm | 10,95 € |
+| Chispas | Galleta | ETL1406 | 6,8 cm | 10,95 € |
+| Rollito | Brazo de reina | ETL1407 | 7,2 cm | 10,95 € |
+| Zanahorio | Zanahoria | ETL1388 | 21,5 cm | 13,95 € |
+| Calabazo | Calabaza | ETL1385 | 22 cm | 13,95 € |
+
+**Packs:** Merienda (4 peq.) 38,95 € · Huerta (2 gr.) 24,95 € · Colección completa 62,95 €
+**Envío:** 3,95 € · gratis desde 25 € *(debe coincidir con la política de envíos de Shopify)*
+
+---
+
+## ✏️ Cómo editar
+
+Casi todo se cambia en **`js/main.js`**, en las listas `TOYS` y `PACKS` de arriba
+(nombre, precio, tamaño, descripción, foto). Los textos largos —titulares, FAQ,
+pie— están en `index.html`.
+
+Los colores de marca están en las variables del principio de `css/styles.css`.
+
+> ⚠️ Si cambias un precio o el umbral de envío gratis, cámbialo **también** en
+> Shopify y en las políticas: si no coinciden, el cliente ve una cosa y paga otra.
+> También hay precios en el bloque de datos estructurados (JSON-LD) de `index.html`.
+
+---
+
+## 💳 Activar la venta real
+
+El checkout usa **cart permalinks de Shopify** (no hace falta ningún token de API).
+Hoy el botón muestra un aviso de pre-lanzamiento porque faltan los IDs de variante.
+
+Para activarlo:
+
+1. **Crea en Shopify los 9 productos**: los 6 juguetes **y los 3 packs**.
+   > Los packs tienen que ser productos propios con su precio con descuento. Si se
+   > mandaran como juguetes sueltos, Shopify cobraría la suma sin descuento.
+2. En cada producto, abre la variante y copia el número del final de la URL
+   (`.../variants/**44012345678901**`).
+3. Pega cada número en `js/main.js`, en el campo `variantId` correspondiente
+   (los 6 de `TOYS` y los 3 de `PACKS`).
+4. En `index.html`, cambia `"OutOfStock"` por `"InStock"` en el bloque JSON-LD.
+5. Guarda, sube los cambios y listo: el botón lleva al checkout real de Shopify.
+
+---
+
+## 📋 Pendiente antes de vender
+
+- [ ] **Datos del vendedor** en el pie (nombre/razón social, NIF, domicilio y
+      correo). Lo exige la LSSI-CE. Hay un `TODO` marcado en `index.html`.
+- [ ] Rellenar `[INSERTAR DIRECCIÓN DE DEVOLUCIÓN]` en la política de devoluciones
+      de Shopify.
+- [ ] Sustituir las fotos: las actuales son **miniaturas de baja resolución**
+      sacadas del Excel del proveedor.
+- [ ] Enlaces reales de Instagram/TikTok en el pie (hay un `TODO`).
+- [ ] Si añades píxel de Meta/TikTok o Google Analytics → hará falta **banner de
+      cookies** con consentimiento previo.
+
+---
+
+## 🚀 Publicar cambios
 
 ```bash
-python3 -m http.server 8000
+git add -A
+git commit -m "Lo que has cambiado"
+git push pages main     # repo principal → pawcadi.github.io
+git push origin main    # repo espejo
 ```
 
-Then open **http://localhost:8000** in your browser. Press `Ctrl + C` to stop.
+La web se actualiza sola en menos de un minuto.
 
----
+Para verla en local:
 
-## 📸 2. Add your product photos
-
-The site shows a placeholder graphic until you add real photos.
-Open **`assets/images/README.md`** for the exact file names to use
-(`hero.jpg`, `product-1.jpg` … `product-4.jpg`). Just drop your JPGs into
-`assets/images/` with those names and refresh — done.
-
----
-
-## ✏️ 3. Things you'll probably want to change
-
-Everything below lives in **`index.html`** (open it in any text editor):
-
-| What | Find this in `index.html` |
-|------|---------------------------|
-| Prices | `$15.00`, `data-price="15.00"`, the bundle buttons |
-| Product name / description | the `<h2>The Pawcadi Enrichment Mat</h2>` area |
-| Colors offered | the `colorSwatches` buttons (Leaf Green / Ocean Blue / Sunset Orange) |
-| Reviews | the `<section id="reviews">` block |
-| FAQ answers | the `<section id="faq">` block |
-| Shipping threshold ($35) | `FREE_SHIP_THRESHOLD` in `js/main.js` |
-| Brand colors | the variables at the top of `css/styles.css` (`--brand`, `--accent`) |
-
-> **Current pricing:** Single **$15.00** · 2-Pack **$27.00** · 3-Pack **$36.00**
-> (3-Pack clears the $35 free-shipping threshold).
-
----
-
-## 🏷️ Rename the brand
-
-The site is branded **Pawcadi**. To change it again later, search the whole
-project for `Pawcadi` (and `Paw<b>cadi` in the two logos) and swap it, then update
-the `<title>` and `<meta name="description">` at the top of `index.html`.
-
----
-
-## 💳 4. Take real payments with Shopify
-
-**Already connected** ✅ — and it needs **no API token**. The Checkout button uses
-a *Shopify cart permalink*: it sends the cart straight to your secure Shopify
-checkout (`pawcadi.myshopify.com`), where Shopify handles payment, shipping and
-orders. This site stays your custom storefront.
-
-How it works (config is at the top of **`js/main.js`**):
-
-```js
-const SHOPIFY = {
-  domain: "pawcadi.myshopify.com",
-  variantIds: {                 // NUMERIC variant ID per color
-    "Leaf Green":    "54153749725517",
-    "Ocean Blue":    "54153749758285",
-    "Sunset Orange": "54153749791053",
-  },
-};
+```bash
+python3 -m http.server 8000    # → http://localhost:8000
 ```
-
-Clicking *Checkout* redirects to
-`https://pawcadi.myshopify.com/cart/<variantId>:<qty>,…` — Shopify adds the items
-and shows the real checkout. The bundles (2-Pack / 3-Pack) are automatic: the cart
-sends the right *quantity*, so you only need one product with one variant per color.
-
-**To find a variant's numeric ID** (if you ever change colors/products): Shopify
-admin → *Products* → open the product → click a variant → the URL ends in
-`.../variants/54153749725517` → that number is the ID.
-
-> **Before going live:** make sure each variant's price is **$15.00** in Shopify
-> (the prices on this site are just display — Shopify charges what's set there),
-> and that your store has an active plan so checkout can accept real payments.
-
----
-
-## 🚀 5. Put it online for free (GitHub Pages)
-
-Since you're learning GitHub, this pairs nicely with it:
-
-1. Create a new repository on GitHub and push this folder to it.
-2. On GitHub, go to the repo's **Settings → Pages**.
-3. Under **Build and deployment → Source**, choose **Deploy from a branch**,
-   pick your `main` branch and the `/ (root)` folder, then **Save**.
-4. Wait ~1 minute. GitHub gives you a public URL like
-   `https://your-username.github.io/your-repo/`. That's your live store! 🎉
-
-Other free options that also work: **Netlify** or **Cloudflare Pages**
-(drag-and-drop this folder onto their dashboard).
-
----
-
-## ✅ What's included
-
-- Responsive design (looks great on phone, tablet and desktop)
-- Sticky header + slide-out shopping cart (saves items between visits)
-- Product gallery, color & bundle options, quantity stepper
-- Benefits, "how it works", reviews, FAQ accordion, newsletter
-- Accessible markup, SEO meta tags, and fast load (no frameworks)
-
----
-
-*Built for the dog-toys niche. Made with 🐶 and a lot of peanut butter.*

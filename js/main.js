@@ -11,8 +11,10 @@
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
+  // Deben coincidir con la política de envíos publicada en Shopify
+  // (pawcadi.myshopify.com/policies/shipping-policy): 3,95 € y gratis desde 25 €.
   const SHIPPING = 3.95;
-  const FREE_SHIP = 35;
+  const FREE_SHIP = 25;
   const eur = new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" });
   const money = (n) => eur.format(n);
 
@@ -38,7 +40,7 @@
       blurb: "La más ligera de la banda. Y la que más rueda." },
     { id: "rollito", name: "Rollito", real: "Brazo de reina", sku: "ETL1407",
       emoji: "🍥", size: "7,2 cm", weight: "27 g", price: 10.95, tier: "merienda",
-      img: "assets/images/toys/brazo-gitano.png", variantId: "",
+      img: "assets/images/toys/rollito.png", variantId: "",
       blurb: "Va enrollado por la vida y siempre sonríe." },
     { id: "zanahorio", name: "Zanahorio", real: "Zanahoria", sku: "ETL1388",
       emoji: "🥕", size: "21,5 cm", weight: "74 g", price: 13.95, tier: "huerta",
@@ -50,16 +52,20 @@
       blurb: "El grandullón del grupo. Aguanta lo que le eches." },
   ];
 
+  /* Los packs son PRODUCTOS PROPIOS en Shopify, con su propio precio con
+     descuento. Ojo: NO se pueden mandar al checkout como sus juguetes sueltos,
+     porque entonces Shopify cobraría la suma sin descuento (p. ej. 43,80 €
+     en vez de 38,95 €). Por eso cada pack lleva su propio variantId. */
   const PACKS = [
-    { id: "pack-merienda", name: "Pack Merienda", price: 38.95,
+    { id: "pack-merienda", name: "Pack Merienda", price: 38.95, variantId: "",
       members: ["croqui", "quesin", "chispas", "rollito"],
       desc: "Los cuatro pequeños: Croqui, Quesín, Chispas y Rollito.",
       img: "assets/images/toys/croissant.png" },
-    { id: "pack-huerta", name: "Pack Huerta", price: 24.95,
+    { id: "pack-huerta", name: "Pack Huerta", price: 24.95, variantId: "",
       members: ["zanahorio", "calabazo"],
       desc: "Los dos grandes: Zanahorio y Calabazo.",
       img: "assets/images/toys/zanahoria.png" },
-    { id: "pack-completo", name: "La colección completa", price: 62.95,
+    { id: "pack-completo", name: "La colección completa", price: 62.95, variantId: "",
       members: ["croqui", "quesin", "chispas", "rollito", "zanahorio", "calabazo"],
       desc: "Los seis personajes. La familia al completo.",
       img: "assets/images/toys/galleta.png", featured: true },
@@ -68,7 +74,10 @@
   const SHOPIFY_DOMAIN = "pawcadi.myshopify.com";
   const toyById = (id) => TOYS.find((t) => t.id === id);
   const packById = (id) => PACKS.find((p) => p.id === id);
-  const shopifyReady = () => TOYS.some((t) => t.variantId);
+  // Sólo hay checkout real cuando TODO lo vendible tiene su variante en Shopify.
+  // Con `some` bastaba una a medias y el checkout se comía líneas sin avisar.
+  const shopifyReady = () =>
+    TOYS.every((t) => t.variantId) && PACKS.every((p) => p.variantId);
 
   /* ---- Cesta ----------------------------------------------------- */
   const CART_KEY = "pawcadi_cart_v2";
@@ -77,10 +86,18 @@
   function loadCart() {
     try {
       const raw = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-      return raw.filter((i) => i && i.qty > 0 && (toyById(i.id) || packById(i.id)));
+      // El `kind` tiene que casar con el `id`: si no, lineOf() daría null y
+      // la cesta se quedaría rota para siempre en ese navegador.
+      return raw.filter(
+        (i) => i && i.qty > 0 &&
+          (i.kind === "pack" ? packById(i.id) : toyById(i.id))
+      );
     } catch (e) { return []; }
   }
-  const saveCart = () => localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  function saveCart() {
+    // El modo privado de Safari puede lanzar al escribir: no debe romper el "Añadir".
+    try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {}
+  }
 
   const lineOf = (item) => {
     const p = item.kind === "pack" ? packById(item.id) : toyById(item.id);
@@ -90,7 +107,7 @@
       sub: item.kind === "pack" ? p.desc : `${p.real} · ${p.size}`,
       price: p.price,
       img: p.img,
-      members: item.kind === "pack" ? p.members : [p.id],
+      variantId: p.variantId,
     };
   };
 
@@ -101,6 +118,7 @@
         <div class="toy-media">
           <span class="toy-tag ${t.tier === "huerta" ? "is-huerta" : ""}">${t.tier === "huerta" ? "Huerta" : "Merienda"}</span>
           <img src="${t.img}" alt="${t.name}, ${t.real.toLowerCase()} de látex con carita"
+               loading="lazy" decoding="async" width="400" height="300"
                onerror="this.onerror=null;this.src='assets/placeholder.svg'">
         </div>
         <div class="toy-body">
@@ -228,27 +246,30 @@
 
     if (!shopifyReady()) {
       alert(
-        "🐾 La colección está en PRE-LANZAMIENTO.\n\n" +
-        "Todavía no se puede comprar: apúntate con tu correo y te avisamos " +
-        "el día que salga, con un 10% de descuento."
+        listaAbierta
+          ? "🐾 La colección está en PRE-LANZAMIENTO.\n\nTodavía no se puede comprar: " +
+            "déjanos tu correo y te avisamos el día que salga, con un 10% de descuento."
+          : "🐾 La colección está en PRE-LANZAMIENTO.\n\nTodavía no se puede comprar. " +
+            "¡Estamos a punto de recibir la primera hornada, vuelve en unos días!"
       );
       closeCart();
-      location.hash = "#faq";
+      if (listaAbierta) goToNewsletter();
       return;
     }
 
-    // Cada línea aporta las variantes de sus miembros (un pack = varios juguetes)
+    // Cada línea de la cesta va con SU variante (los packs tienen la suya, con
+    // el precio con descuento). Si alguna no se puede mapear, no seguimos:
+    // antes que cobrar de más o perder líneas, mejor parar.
     const qtyByVariant = {};
-    cart.forEach((item) => {
+    for (const item of cart) {
       const l = lineOf(item);
-      if (!l) return;
-      l.members.forEach((memberId) => {
-        const vid = toyById(memberId).variantId;
-        if (vid) qtyByVariant[vid] = (qtyByVariant[vid] || 0) + item.qty;
-      });
-    });
+      if (!l || !l.variantId) {
+        alert("Estamos teniendo un problema con la cesta. Escríbenos y te ayudamos. 🐾");
+        return;
+      }
+      qtyByVariant[l.variantId] = (qtyByVariant[l.variantId] || 0) + item.qty;
+    }
     const parts = Object.entries(qtyByVariant).map(([vid, q]) => `${vid}:${q}`);
-    if (parts.length === 0) { alert("Falta configurar los IDs de variante de Shopify en js/main.js."); return; }
 
     checkoutBtn.disabled = true;
     checkoutBtn.textContent = "…";
@@ -275,11 +296,102 @@
     navToggle.setAttribute("aria-expanded", "false");
   }));
 
-  /* ---- Newsletter ------------------------------------------------ */
-  $("#newsletter").addEventListener("submit", (e) => {
-    e.preventDefault();
-    e.target.reset();
-    alert("¡Apuntado! 🐶 Te avisamos en cuanto salga la colección, con tu 10%.");
+  /* ---- Lista de espera ------------------------------------------- */
+  /* IMPORTANTE: sin uno de estos dos rellenos, el formulario NO se muestra.
+     Se probó mandar los correos al endpoint /contact de Shopify y NO funciona
+     desde otro dominio (devuelve 400/403), así que se quitó: un formulario que
+     dice "¡Hecho!" mientras descarta el correo es peor que no tener formulario.
+
+     Opción A (recomendada) — servicio gratuito de formularios:
+       date de alta en https://formspree.io (gratis, sin tarjeta) y pega aquí
+       la URL que te dan, del tipo https://formspree.io/f/abcdwxyz
+     Opción B — sin registrarte en nada: pon un correo y el botón abrirá el
+       gestor de correo del visitante con el mensaje ya escrito. */
+  const FORM_ENDPOINT = "";   // ← Opción A
+  const CONTACT_EMAIL = "";   // ← Opción B
+
+  function goToNewsletter() {
+    const sec = $("#avisame");
+    if (!sec) return;
+    sec.scrollIntoView({ behavior: "smooth", block: "center" });
+    const input = $("#newsletter input");
+    if (input) setTimeout(() => input.focus(), 400);
+  }
+
+  const newsletter = $("#newsletter");
+  const newsletterMsg = $("#newsletterMsg");
+
+  const listaAbierta = Boolean(FORM_ENDPOINT || CONTACT_EMAIL);
+
+  if (!listaAbierta) {
+    // Sin sitio donde guardar los correos: el formulario ya viene oculto del HTML.
+    // Aquí sólo quitamos de la web la promesa del 10% por apuntarse.
+    const anuncio = $(".announce");
+    if (anuncio) {
+      anuncio.innerHTML =
+        "🐾 <b>Pre-lanzamiento</b> — la primera hornada llega pronto";
+    }
+    const ctaLead = $("#avisame .cta-band p");
+    if (ctaLead) {
+      ctaLead.textContent =
+        "La primera hornada es corta y está en camino. En unos días abrimos la lista de espera.";
+    }
+  } else {
+    newsletter.hidden = false;
+    newsletterMsg.hidden = true;
+    newsletterMsg.textContent = "";
+
+    newsletter.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const input = $("input", newsletter);
+      const btn = $("button", newsletter);
+      const email = (input.value || "").trim();
+      if (!email) return;
+
+      // Opción B: abrir el gestor de correo del visitante.
+      if (!FORM_ENDPOINT) {
+        const asunto = encodeURIComponent("Avisadme del lanzamiento");
+        const cuerpo = encodeURIComponent(
+          `Hola, quiero que me aviséis cuando salga la colección.\n\nMi correo: ${email}`
+        );
+        window.location.href = `mailto:${CONTACT_EMAIL}?subject=${asunto}&body=${cuerpo}`;
+        newsletterMsg.textContent = "Se abrirá tu correo para que nos envíes el mensaje.";
+        newsletterMsg.hidden = false;
+        return;
+      }
+
+      // Opción A: servicio de formularios. Aquí SÍ leemos la respuesta, así que
+      // sólo decimos "hecho" cuando de verdad se ha guardado.
+      btn.disabled = true;
+      const prev = btn.textContent;
+      btn.textContent = "Enviando…";
+      fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ email, origen: "pre-lanzamiento Pawcadi" }),
+      })
+        .then((r) => {
+          if (!r.ok) throw new Error("respuesta " + r.status);
+          newsletter.reset();
+          newsletterMsg.textContent = "¡Hecho! 🐶 Te avisamos en cuanto salga la colección.";
+        })
+        .catch(() => {
+          newsletterMsg.textContent =
+            "No hemos podido apuntarte. Inténtalo de nuevo en un momento, por favor.";
+        })
+        .finally(() => {
+          newsletterMsg.hidden = false;
+          btn.disabled = false;
+          btn.textContent = prev;
+        });
+    });
+  }
+
+  /* Al volver "atrás" desde Shopify, el navegador restaura la página del caché
+     y el botón se quedaba deshabilitado con "…". */
+  window.addEventListener("pageshow", () => {
+    checkoutBtn.disabled = false;
+    checkoutBtn.textContent = "Finalizar compra";
   });
 
   /* ---- Init ------------------------------------------------------ */

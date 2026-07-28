@@ -10,8 +10,14 @@
   <meta property="og:title" content="Pawcadi — Comida que muerde" />
   <meta property="og:description" content="Seis snacks de látex con carita, chirrido y un mordisco ya dado. Juguetes para perros con envío desde España." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="assets/images/toys/croissant.png" />
+  <!-- og:image tiene que ser URL absoluta o WhatsApp/Facebook/TikTok no la muestran -->
+  <meta property="og:image" content="https://pawcadi.github.io/assets/images/toys/croissant.png" />
+  <meta property="og:url" content="https://pawcadi.github.io/" />
+  <meta property="og:site_name" content="Pawcadi" />
+  <meta property="og:locale" content="es_ES" />
+  <meta name="twitter:card" content="summary_large_image" />
 
+  <link rel="canonical" href="https://pawcadi.github.io/" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
 
   <!-- Fonts -->
@@ -20,6 +26,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Datos estructurados: el catálogo lo pinta el JS, así que sin esto Google
+       no ve ni los productos ni los precios.
+       AL LANZAR: cambiar "OutOfStock" por "InStock" en los 6. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Comida que muerde — colección de juguetes de látex para perros",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "item": { "@type": "Product", "name": "Croqui — croissant de látex con sonido", "image": "https://pawcadi.github.io/assets/images/toys/croissant.png", "description": "Juguete de látex con chirriador para perros, con forma de croissant mordido. 11 cm.", "brand": { "@type": "Brand", "name": "Pawcadi" }, "sku": "ETL1404", "offers": { "@type": "Offer", "price": "10.95", "priceCurrency": "EUR", "availability": "https://schema.org/OutOfStock" } } },
+      { "@type": "ListItem", "position": 2, "item": { "@type": "Product", "name": "Quesín — queso de látex con sonido", "image": "https://pawcadi.github.io/assets/images/toys/queso.png", "description": "Juguete de látex con chirriador para perros, con forma de cuña de queso mordida. 6,8 cm.", "brand": { "@type": "Brand", "name": "Pawcadi" }, "sku": "ETL1405", "offers": { "@type": "Offer", "price": "10.95", "priceCurrency": "EUR", "availability": "https://schema.org/OutOfStock" } } },
+      { "@type": "ListItem", "position": 3, "item": { "@type": "Product", "name": "Chispas — galleta de látex con sonido", "image": "https://pawcadi.github.io/assets/images/toys/galleta.png", "description": "Juguete de látex con chirriador para perros, con forma de galleta mordida. 6,8 cm.", "brand": { "@type": "Brand", "name": "Pawcadi" }, "sku": "ETL1406", "offers": { "@type": "Offer", "price": "10.95", "priceCurrency": "EUR", "availability": "https://schema.org/OutOfStock" } } },
+      { "@type": "ListItem", "position": 4, "item": { "@type": "Product", "name": "Rollito — brazo de reina de látex con sonido", "image": "https://pawcadi.github.io/assets/images/toys/rollito.png", "description": "Juguete de látex con chirriador para perros, con forma de brazo de reina mordido. 7,2 cm.", "brand": { "@type": "Brand", "name": "Pawcadi" }, "sku": "ETL1407", "offers": { "@type": "Offer", "price": "10.95", "priceCurrency": "EUR", "availability": "https://schema.org/OutOfStock" } } },
+      { "@type": "ListItem", "position": 5, "item": { "@type": "Product", "name": "Zanahorio — zanahoria de látex con sonido", "image": "https://pawcadi.github.io/assets/images/toys/zanahoria.png", "description": "Juguete de látex con chirriador para perros, con forma de zanahoria mordida. 21,5 cm.", "brand": { "@type": "Brand", "name": "Pawcadi" }, "sku": "ETL1388", "offers": { "@type": "Offer", "price": "13.95", "priceCurrency": "EUR", "availability": "https://schema.org/OutOfStock" } } },
+      { "@type": "ListItem", "position": 6, "item": { "@type": "Product", "name": "Calabazo — calabaza de látex con sonido", "image": "https://pawcadi.github.io/assets/images/toys/calabaza.png", "description": "Juguete de látex con chirriador para perros, con forma de calabaza mordida. 22 cm.", "brand": { "@type": "Brand", "name": "Pawcadi" }, "sku": "ETL1385", "offers": { "@type": "Offer", "price": "13.95", "priceCurrency": "EUR", "availability": "https://schema.org/OutOfStock" } } }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -89,12 +114,12 @@
 
         <div class="hero-media">
           <div class="hero-collage">
-            <img src="assets/images/toys/croissant.png" alt="Croqui, croissant de látex con carita" />
-            <img src="assets/images/toys/queso.png" alt="Quesín, queso de látex con carita" />
-            <img src="assets/images/toys/galleta.png" alt="Chispas, galleta de látex con carita" />
-            <img src="assets/images/toys/brazo-gitano.png" alt="Rollito, brazo de reina de látex con carita" />
-            <img src="assets/images/toys/zanahoria.png" alt="Zanahorio, zanahoria de látex con carita" />
-            <img src="assets/images/toys/calabaza.png" alt="Calabazo, calabaza de látex con carita" />
+            <img width="495" height="321" decoding="async" src="assets/images/toys/croissant.png" alt="Croqui, croissant de látex con carita" />
+            <img width="345" height="391" decoding="async" src="assets/images/toys/queso.png" alt="Quesín, queso de látex con carita" />
+            <img width="322" height="371" decoding="async" src="assets/images/toys/galleta.png" alt="Chispas, galleta de látex con carita" />
+            <img src="assets/images/toys/rollito.png" alt="Rollito, brazo de reina de látex con carita" />
+            <img width="209" height="476" decoding="async" src="assets/images/toys/zanahoria.png" alt="Zanahorio, zanahoria de látex con carita" />
+            <img width="206" height="557" decoding="async" src="assets/images/toys/calabaza.png" alt="Calabazo, calabaza de látex con carita" />
           </div>
         </div>
       </div>
@@ -106,7 +131,7 @@
         <div class="trust-item"><span class="ic">🌿</span> <span>Látex natural <small>Blandito y flexible</small></span></div>
         <div class="trust-item"><span class="ic">🔊</span> <span>Chirrido dentro <small>El sonido que les vuelve locos</small></span></div>
         <div class="trust-item"><span class="ic">🇪🇸</span> <span>Envío desde España <small>Sin aduanas ni esperas</small></span></div>
-        <div class="trust-item"><span class="ic">💚</span> <span>Garantía 30 días <small>O te devolvemos el dinero</small></span></div>
+        <div class="trust-item"><span class="ic">💚</span> <span>30 días para devolver <small>Y 14 de desistimiento por ley</small></span></div>
       </div>
     </div>
 
@@ -120,11 +145,23 @@
         </div>
 
         <div class="toy-grid" id="toyGrid"><!-- productos generados por JS --></div>
+        <noscript>
+          <ul class="size-note" style="text-align:left">
+            <li><b>Croqui</b> — croissant, 11 cm — 10,95 €</li>
+            <li><b>Quesín</b> — queso, 6,8 cm — 10,95 €</li>
+            <li><b>Chispas</b> — galleta, 6,8 cm — 10,95 €</li>
+            <li><b>Rollito</b> — brazo de reina, 7,2 cm — 10,95 €</li>
+            <li><b>Zanahorio</b> — zanahoria, 21,5 cm — 13,95 €</li>
+            <li><b>Calabazo</b> — calabaza, 22 cm — 13,95 €</li>
+            <li style="margin-top:10px">Precios con IVA incluido. Activa JavaScript para poder comprar.</li>
+          </ul>
+        </noscript>
 
         <p class="size-note">
           <b>¿Qué tamaño elijo?</b> Los de <b>merienda</b> (6–11&nbsp;cm) van bien para perros
           pequeños y medianos. Los de <b>huerta</b> (21–22&nbsp;cm) son más grandes, para
           medianos y grandes. Supervisa siempre el juego.
+          <br><span style="font-size:.9em">Todos los precios llevan el <b>IVA incluido</b>. Envío 3,95&nbsp;€, gratis desde 25&nbsp;€.</span>
         </p>
       </div>
     </section>
@@ -206,27 +243,41 @@
           </div>
           <div class="faq-item">
             <button class="faq-q"><span>¿Cómo se limpian?</span><span class="chev" aria-hidden="true">▾</span></button>
-            <div class="faq-a"><p>Con agua tibia y jabón suave, frotando con la mano, y dejar secar al aire. No los metas en el lavavajillas ni en la lavadora: el calor estropea el látex y puede colarse agua en el chirriador.</p></div>
+            <div class="faq-a"><p>Con agua tibia y jabón suave, frotando con la mano, y después déjalos secar al aire. No los metas en el lavavajillas ni en la lavadora: el calor estropea el látex y puede colarse agua en el chirriador.</p></div>
           </div>
           <div class="faq-item">
             <button class="faq-q"><span>¿Desde dónde enviáis?</span><span class="chev" aria-hidden="true">▾</span></button>
-            <div class="faq-a"><p>Desde España, con stock propio: sin aduanas ni esperas de semanas. Envío 3,95&nbsp;€ y gratis a partir de 35&nbsp;€. Ahora mismo la colección está en pre-lanzamiento — apúntate abajo y te avisamos el día que salga.</p></div>
+            <div class="faq-a"><p>Desde España, con stock propio: sin aduanas ni esperas de semanas. Envío 3,95&nbsp;€ y gratis a partir de 25&nbsp;€, con entrega estimada de 3 a 5 días laborables. Ahora mismo la colección está en pre-lanzamiento — déjanos tu correo abajo y te avisamos el día que salga.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q"><span>¿Puedo devolverlo si no le gusta a mi perro?</span><span class="chev" aria-hidden="true">▾</span></button>
+            <div class="faq-a"><p>Sí. Como comprador tienes <b>14 días naturales</b> desde que recibes el pedido para desistir sin dar explicaciones, tal y como marca la ley española. Nosotros te damos margen de sobra: <b>30 días</b> para devolverlo. El juguete debe volver en un estado razonable. Además, por ley, todo producto tiene <b>3 años de garantía</b> frente a defectos de fabricación. Tienes el detalle en nuestra <a href="https://pawcadi.myshopify.com/policies/refund-policy" target="_blank" rel="noopener">política de devoluciones</a>.</p></div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- CTA band -->
-    <section>
+    <section id="avisame">
       <div class="container">
         <div class="cta-band">
           <h2>Sé de los primeros en tenerlos</h2>
           <p>La primera hornada es corta. Déjanos tu correo y te avisamos antes que a nadie, con un 10% de descuento.</p>
-          <form class="newsletter" id="newsletter">
-            <input type="email" placeholder="Tu correo electrónico" aria-label="Correo electrónico" required />
+          <!-- Oculto de serie: sólo se muestra cuando hay dónde guardar los correos
+               (ver FORM_ENDPOINT / CONTACT_EMAIL en js/main.js). Así nunca pedimos
+               un correo que no vayamos a poder recoger. -->
+          <form class="newsletter" id="newsletter" hidden>
+            <label class="visually-hidden" for="newsletterEmail">Correo electrónico</label>
+            <input id="newsletterEmail" name="email" type="email" autocomplete="email"
+                   placeholder="Tu correo electrónico" required />
             <button class="btn btn-primary" type="submit">Avisadme</button>
           </form>
-          <p class="cta-note">Sin spam, solo cosas de perros. Te puedes borrar cuando quieras.</p>
+          <p class="cta-note" id="newsletterMsg" role="status">Estamos abriendo la lista de espera. ¡Vuelve en unos días!</p>
+          <p class="cta-note">
+            Sin spam, solo cosas de perros. Te puedes borrar cuando quieras. Al apuntarte
+            aceptas nuestra <a href="https://pawcadi.myshopify.com/policies/privacy-policy"
+            target="_blank" rel="noopener">política de privacidad</a>.
+          </p>
         </div>
       </div>
     </section>
@@ -247,11 +298,10 @@
             <span style="color:#fff">Paw<b style="color:#ff8a5b">cadi</b></span>
           </a>
           <p>Juguetes para perros elegidos de uno en uno. Colecciones con nombre, cara y personalidad, enviadas desde España.</p>
-          <div class="socials">
-            <a href="#" aria-label="Instagram">📷</a>
-            <a href="#" aria-label="TikTok">🎵</a>
-            <a href="#" aria-label="Facebook">📘</a>
-          </div>
+          <!-- TODO redes: poner aquí los enlaces reales de Instagram/TikTok cuando existan.
+               Se han quitado los iconos porque apuntaban a "#" y no llevaban a ningún sitio. -->
+          <!-- TODO LEGAL (obligatorio antes de vender — LSSI-CE art. 10):
+               nombre o razón social, NIF, domicilio y correo de contacto. -->
         </div>
         <div class="footer-col">
           <h4>Tienda</h4>
@@ -275,7 +325,7 @@
       </div>
       <div class="footer-bottom">
         <span>© <span id="year"></span> Pawcadi. Todos los derechos reservados.</span>
-        <span class="payments" aria-label="Pagos aceptados">💳 🅿️ 🍎 🇬</span>
+        <span class="payments">Pago seguro con tarjeta, PayPal, Apple Pay y Google Pay</span>
       </div>
     </div>
   </footer>
