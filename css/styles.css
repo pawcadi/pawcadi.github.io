@@ -563,11 +563,19 @@ section { padding: 84px 0; }
   display: grid; place-items: center;
 }
 .socials a:hover { background: var(--brand); }
+.footer-legal {
+  border-top: 1px solid rgba(255, 255, 255, .12);
+  margin-top: 30px; padding-top: 22px;
+  font-size: .82rem; line-height: 1.7; color: #9db0a8;
+}
+.footer-legal b { color: #c9d8d2; font-weight: 600; }
+.footer-legal a { text-decoration: underline; }
+
 .footer-bottom {
   display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
-  padding-top: 22px; font-size: .85rem; color: #8a9b94;
+  padding-top: 16px; font-size: .85rem; color: #8a9b94;
 }
-.payments { display: flex; gap: 8px; align-items: center; font-size: 1.4rem; }
+.payments { font-size: .85rem; }
 
 /* 16. Cart drawer ----------------------------------------------------- */
 .overlay {

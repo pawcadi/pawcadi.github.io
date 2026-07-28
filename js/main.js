@@ -307,8 +307,8 @@
        la URL que te dan, del tipo https://formspree.io/f/abcdwxyz
      Opción B — sin registrarte en nada: pon un correo y el botón abrirá el
        gestor de correo del visitante con el mensaje ya escrito. */
-  const FORM_ENDPOINT = "";   // ← Opción A
-  const CONTACT_EMAIL = "";   // ← Opción B
+  const FORM_ENDPOINT = "";                          // ← Opción A (recomendada)
+  const CONTACT_EMAIL = "egoitzmargon@gmail.com";    // ← Opción B (activa)
 
   function goToNewsletter() {
     const sec = $("#avisame");
